@@ -7,17 +7,20 @@
   - name: update repository index
     yum:
       update_cache: yes
+    when: ansible_distribution == 'CentOS'
 
   - name: install apache2 package
     yum:
       name: httpd
       state: latest
+    when: ansible_distribution == 'CentOS'
   
   - name: start apache2 service
     service:
       name: httpd
       state: started
       enabled: yes
+    when: ansible_distribution == 'CentOS'
 
   # - name: copy html file for site
   #   copy:
@@ -31,6 +34,7 @@
     yum:
       name: php
       state: latest
+    when: ansible_distribution == 'CentOS'
 
   - name: ensure a list of packages installed
     yum:
@@ -39,4 +43,5 @@
       packages:
       - httpd
       - httpd-tools
+    when: ansible_distribution == 'CentOS'
 ...
