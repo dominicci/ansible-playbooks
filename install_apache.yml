@@ -15,13 +15,6 @@
       name: httpd
       state: latest
     when: ansible_distribution == 'CentOS'
-  
-  - name: start apache2 service
-    service:
-      name: httpd
-      state: started
-      enabled: yes
-    when: ansible_distribution == 'CentOS'
 
   - name: copy html file for site
     copy:
@@ -30,6 +23,13 @@
       owner: root
       group: root
       mode: 0644
+    when: ansible_distribution == 'CentOS'
+
+  - name: start apache2 service
+    service:
+      name: httpd
+      state: started
+      enabled: yes
     when: ansible_distribution == 'CentOS'
 
   - name: add PHP support for apache
