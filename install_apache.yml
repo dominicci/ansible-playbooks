@@ -4,16 +4,15 @@
   become: true
   tasks:
 
-# CentOS
-  - name: install apache2 and PHP packages for CentOS/RedHat
-    yum:
-      name:
-        - httpd
-        - php
+  # Install Apache and PHP using package manager
+  - name: install Apache and PHP
+    package:
+      name: 
+        - "{{ apache_package }}"
+        - "{{ php_package }}"
       state: latest
       update_cache: yes
-    when: ansible_distribution in ['CentOS', 'RedHat']
-
+  # Copy the index.html file to the web server root directory for CentOS and RedHat
   - name: copy html file for site
     copy:
       src: /home/saintdominicci/ansible-playbooks/files/index.html
@@ -22,21 +21,11 @@
       group: root
       mode: 0644
     when: ansible_distribution in ['CentOS', 'RedHat']
-
+  # Start the Apache service for CentOS and RedHat
   - name: start apache2 service
     service:
       name: httpd
       state: started
       enabled: yes
     when: ansible_distribution in ['CentOS', 'RedHat']
-
-# Debian
-  - name: install apache2 and PHP packages for Debian/Ubuntu
-    apt:
-      name: 
-        - apache2
-        - libapache2-mod-php
-      state: latest
-      update_cache: yes
-    when: ansible_distribution in ['Debian', 'Ubuntu']
 ...
