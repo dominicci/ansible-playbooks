@@ -23,13 +23,14 @@
       enabled: yes
     when: ansible_distribution == 'CentOS'
 
-  # - name: copy html file for site
-  #   copy:
-  #     src: /files/index.html
-  #     dest: /var/www/html/index.html
-  #     owner: root
-  #     group: root
-  #     mode: 0644
+  - name: copy html file for site
+    copy:
+      src: /files/index.html
+      dest: /var/www/html/index.html
+      owner: root
+      group: root
+      mode: 0644
+    when: ansible_distribution == 'CentOS'
 
   - name: add PHP support for apache
     yum:
