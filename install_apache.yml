@@ -10,9 +10,11 @@
       update_cache: yes
     when: ansible_distribution in ['CentOS', 'RedHat']
 
-  - name: install apache2 package
+  - name: install apache2 and PHP packages for CentOS/RedHat
     yum:
-      name: httpd
+      name:
+        - httpd
+        - php
       state: latest
     when: ansible_distribution == 'CentOS'
 
@@ -32,36 +34,17 @@
       enabled: yes
     when: ansible_distribution == 'CentOS'
 
-  - name: add PHP support for apache
-    yum:
-      name: php
-      state: latest
-    when: ansible_distribution == 'CentOS'
-
-  - name: ensure a list of packages installed
-    yum:
-      name: "{{ packages }}"
-    vars:
-      packages:
-      - httpd
-      - httpd-tools
-    when: ansible_distribution == 'CentOS'
-
 # Debian
   - name: update repository index
     apt:
       update_cache: yes
     when: ansible_distribution in ['Debian', 'Ubuntu']
 
-  - name: install apache2 package
+  - name: install apache2 and PHP packages for Debian/Ubuntu
     apt:
-      name: apache2
-      state: latest
-    when: ansible_distribution in ['Debian', 'Ubuntu']
-
-  - name: add PHP support for apache
-    apt:
-      name: libapache2-mod-php
+      name: 
+        - apache2
+        - libapache2-mod-php
       state: latest
     when: ansible_distribution in ['Debian', 'Ubuntu']
 ...
