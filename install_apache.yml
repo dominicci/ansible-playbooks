@@ -5,18 +5,14 @@
   tasks:
 
 # CentOS
-  - name: update repository index
-    yum:
-      update_cache: yes
-    when: ansible_distribution in ['CentOS', 'RedHat']
-
   - name: install apache2 and PHP packages for CentOS/RedHat
     yum:
       name:
         - httpd
         - php
       state: latest
-    when: ansible_distribution == 'CentOS'
+      update_cache: yes
+    when: ansible_distribution in ['CentOS', 'RedHat']
 
   - name: copy html file for site
     copy:
@@ -25,26 +21,22 @@
       owner: root
       group: root
       mode: 0644
-    when: ansible_distribution == 'CentOS'
+    when: ansible_distribution in ['CentOS', 'RedHat']
 
   - name: start apache2 service
     service:
       name: httpd
       state: started
       enabled: yes
-    when: ansible_distribution == 'CentOS'
+    when: ansible_distribution in ['CentOS', 'RedHat']
 
 # Debian
-  - name: update repository index
-    apt:
-      update_cache: yes
-    when: ansible_distribution in ['Debian', 'Ubuntu']
-
   - name: install apache2 and PHP packages for Debian/Ubuntu
     apt:
       name: 
         - apache2
         - libapache2-mod-php
       state: latest
+      update_cache: yes
     when: ansible_distribution in ['Debian', 'Ubuntu']
 ...
