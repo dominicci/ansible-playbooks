@@ -44,14 +44,14 @@
     when: ansible_distribution in ['CentOS', 'RedHat']
 
   # Copy the index.html file to the web server root directory for CentOS and RedHat
-  - name: copy html file for site
+  - name: copy default html file for site
     tags: apache,httpd,centos
     copy:
-      src: /home/saintdominicci/ansible-playbooks/files/index.html
+      src: default_site.html
       dest: /var/www/html/index.html
       owner: root
       group: root
-      mode: 0644
+      mode: 0644 #set permissions of the file
     when: ansible_distribution in ['CentOS', 'RedHat']
   # Start the Apache service for CentOS and RedHat
   - name: start apache2 service
