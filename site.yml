@@ -71,4 +71,14 @@
       name: postgresql
       state: latest
     when: ansible_distribution in ['CentOS', 'RedHat']
+
+# Install file server package
+- hosts: file_servers
+  become: true
+  tasks:
+
+  - name: install samba package
+    package:
+      name: samba
+      state: latest
 ...
