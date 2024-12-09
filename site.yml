@@ -60,6 +60,31 @@
       state: latest
     when: ansible_distribution in ['CentOS', 'RedHat']
 
+  # Start the Apache service for CentOS and RedHat
+  - name: start httpd service (CentOS and RedHat)
+    tags: apache,httpd,centos
+    service:
+      name: httpd
+      state: started
+      enabled: yes #ensure the service starts on boot
+    when: ansible_distribution in ['CentOS', 'RedHat']
+
+  - name: change e-mail address for admin
+    tags: apache,centos,httpd
+    lineinfile:
+      path: /etc/httpd/conf/httpd.conf
+      regexp: '^ServerAdmin'
+      line: ServerAdmin samuelnjoku@gmail.com
+    when: ansible_distribution in ['CentOS', 'RedHat']
+    register: httpd
+
+  - name: restart httpd service (CentOS and RedHat)
+    tags: apache,httpd,centos
+    service:
+      name: httpd
+      state: restarted
+    when: httpd.changed
+
   # Copy the index.html file to the web server root directory for CentOS and RedHat
   - name: copy default html file for site
     tags: apache,apache2,httpd
@@ -69,15 +94,6 @@
       owner: root
       group: root
       mode: 0644 #set permissions of the file
-
-  # Start the Apache service for CentOS and RedHat
-  - name: start apache2 service
-    tags: apache,httpd,centos
-    service:
-      name: httpd
-      state: started
-      enabled: yes
-    when: ansible_distribution in ['CentOS', 'RedHat']
 
 - hosts: db_servers
   become: true
