@@ -1,0 +1,48 @@
+---
+
+- hosts: all
+  become: true
+  pre_tasks:
+
+  - name: install updates (CentOS and RedHat)
+    tags: always
+    yum:
+      update_only: yes
+      update_cache: yes
+    when: ansible_distribution in ['CentOS', 'RedHat']
+
+  - name: install updates (Debian and Ubuntu)
+    tags: always
+    apt:
+      upgrade: dist
+      update_cache: yes
+    when: ansible_distribution in ['Debian', 'Ubuntu']
+
+
+# Create user
+- hosts: all
+  become: true
+  tasks:
+  
+  - name: create Albert user
+    tags: always
+    user:
+      name: albert
+      group: root
+
+  - name: add ssh key to Albert user
+    tags: always
+    authorized_key:
+      user: albert
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM+fwpL41O7eZROCjfuvFKgJAhFVvJLjCMdTAmIG/fOT ansible"
+
+  - name: add sudo privileges to Albert user
+    tags: always
+    copy:
+      src: sudoer_albert
+      dest: /etc/sudoers.d/albert
+      owner: root
+      group: root
+      mode: 0440
+
+...
