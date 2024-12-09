@@ -2,19 +2,19 @@
 
 - hosts: all
   become: true
-  tasks:
+  pre_tasks:
 
-  - name: install updates (CentOS)
+  - name: install updates (CentOS and RedHat)
     yum:
       update_only: yes
       update_cache: yes
-    when: ansible_distribution in ['CentOS']
+    when: ansible_distribution in ['CentOS', 'RedHat']
 
-  - name: install updates (Debian)
+  - name: install updates (Debian and Ubuntu)
     apt:
       upgrade: dist
       update_cache: yes
-    when: ansible_distribution in ['Debian']
+    when: ansible_distribution in ['Debian', 'Ubuntu']
 
 
 - hosts: web_servers
@@ -54,5 +54,21 @@
       name: httpd
       state: started
       enabled: yes
+    when: ansible_distribution in ['CentOS', 'RedHat']
+
+- hosts: db_servers
+  become: true
+  tasks:
+
+  - name: install PostgreSQL database package (Debian and Ubuntu)
+    apt:
+      name: postgresql
+      state: latest
+    when: ansible_distribution in ['Debian', 'Ubuntu']
+
+  - name: install PostgreSQL database package (CentOS and RedHat)
+    yum:
+      name: postgresql
+      state: latest
     when: ansible_distribution in ['CentOS', 'RedHat']
 ...
