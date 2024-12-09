@@ -33,8 +33,8 @@
     tags: always
     authorized_key:
       user: albert
-      key: "{{ lookup('file', '~/.ssh/ansible.pub') }}"
-      # key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM+fwpL41O7eZROCjfuvFKgJAhFVvJLjCMdTAmIG/fOT ansible"
+      # key: "{{ lookup('file', '/home/saintdominicci/.ssh/ansible.pub') }}"
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM+fwpL41O7eZROCjfuvFKgJAhFVvJLjCMdTAmIG/fOT ansible"
 
   - name: add sudo privileges to Albert user
     tags: always
