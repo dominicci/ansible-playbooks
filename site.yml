@@ -29,6 +29,22 @@
       name: albert
       group: root
 
+  - name: add ssh key to Albert user
+    tags: always
+    authorized_key:
+      user: albert
+      key: "{{ lookup('file', '~/.ssh/ansible.pub') }}"
+      # key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM+fwpL41O7eZROCjfuvFKgJAhFVvJLjCMdTAmIG/fOT ansible"
+
+  - name: add sudo privileges to Albert user
+    tags: always
+    copy:
+      src: sudoer_albert
+      dest: /etc/sudoers.d/albert
+      owner: root
+      group: root
+      mode: 0440
+
 - hosts: workstations
   become: true
   tasks:
