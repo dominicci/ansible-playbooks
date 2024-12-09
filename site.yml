@@ -53,6 +53,7 @@
       group: root
       mode: 0644 #set permissions of the file
     when: ansible_distribution in ['CentOS', 'RedHat']
+
   # Start the Apache service for CentOS and RedHat
   - name: start apache2 service
     tags: apache,httpd,centos
