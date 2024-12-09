@@ -24,15 +24,15 @@
       update_cache: yes
     when: ansible_distribution in ['CentOS', 'RedHat']
 
-  # Copy the index.html file to the web server root directory for CentOS and RedHat
+  # Copy the default_site.html file to the web server root directory
   - name: copy html file for site
+    tags: apache,apache2,httpd
     copy:
       src: /home/saintdominicci/ansible-playbooks/files/index.html
       dest: /var/www/html/index.html
       owner: root
       group: root
       mode: 0644
-    when: ansible_distribution in ['CentOS', 'RedHat']
   # Start the Apache service for CentOS and RedHat
   - name: start apache2 service
     service:
