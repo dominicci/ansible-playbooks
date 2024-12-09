@@ -19,6 +19,16 @@
     when: ansible_distribution in ['Debian', 'Ubuntu']
 
 
+- hosts: all
+  become: true
+  tasks:
+  
+  - name: create Albert user
+    tags: always
+    user:
+      name: albert
+      group: root
+
 - hosts: workstations
   become: true
   tasks:
@@ -69,21 +79,22 @@
       enabled: yes #ensure the service starts on boot
     when: ansible_distribution in ['CentOS', 'RedHat']
 
-  - name: change e-mail address for admin
-    tags: apache,centos,httpd
-    lineinfile:
-      path: /etc/httpd/conf/httpd.conf
-      regexp: '^ServerAdmin'
-      line: ServerAdmin samuelnjoku@gmail.com
-    when: ansible_distribution in ['CentOS', 'RedHat']
-    register: httpd
+  # # Change e-mail address for admin in Apache configuration file for CentOS and RedHat
+  # - name: change e-mail address for admin
+  #   tags: apache,centos,httpd
+  #   lineinfile:
+  #     path: /etc/httpd/conf/httpd.conf
+  #     regexp: '^ServerAdmin'
+  #     line: ServerAdmin samuelnjoku@gmail.com
+  #   when: ansible_distribution in ['CentOS', 'RedHat']
+  #   register: httpd
 
-  - name: restart httpd service (CentOS and RedHat)
-    tags: apache,httpd,centos
-    service:
-      name: httpd
-      state: restarted
-    when: httpd.changed
+  # - name: restart httpd service (CentOS and RedHat)
+  #   tags: apache,httpd,centos
+  #   service:
+  #     name: httpd
+  #     state: restarted
+  #   when: httpd.changed
 
   # Copy the index.html file to the web server root directory for CentOS and RedHat
   - name: copy default html file for site
