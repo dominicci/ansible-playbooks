@@ -8,3 +8,6 @@ node5 ansible_host=10.0.0.7
 
 [file_servers]
 node2 ansible_host=10.1.0.2
+
+[workstations]
+node0 ansible_host=10.0.0.3
