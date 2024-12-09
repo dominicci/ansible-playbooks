@@ -4,6 +4,23 @@
   become: true
   tasks:
 
+  - name: install updates (CentOS)
+    yum:
+      update_only: yes
+      update_cache: yes
+    when: ansible_distribution in ['CentOS']
+
+  - name: install updates (Debian)
+    apt:
+      upgrade: dist
+      update_cache: yes
+    when: ansible_distribution in ['Debian']
+
+
+- hosts: web_servers
+  become: true
+  tasks:
+
   # Install Apache and PHP using package manager on Debian and Ubuntu
   - name: install Apache and PHP for Debian and Ubuntu
     package:
@@ -11,7 +28,6 @@
         - apache2
         - libapache2-mod-php
       state: latest
-      update_cache: yes
     when: ansible_distribution in ['Debian', 'Ubuntu']
 
   # Install Apache and PHP using package manager on CentOS and RedHat
@@ -21,7 +37,6 @@
         - httpd
         - php
       state: latest
-      update_cache: yes
     when: ansible_distribution in ['CentOS', 'RedHat']
 
   # Copy the index.html file to the web server root directory for CentOS and RedHat
