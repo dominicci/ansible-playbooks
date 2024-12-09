@@ -4,14 +4,14 @@
   become: true
   pre_tasks:
 
-  - name: install updates (CentOS and RedHat)
+  - name: update repo cache (CentOS and RedHat)
     tags: always
     yum:
       update_cache: yes
     changed_when: false  # control over what is considered a change
     when: ansible_distribution in ['CentOS', 'RedHat']
 
-  - name: install updates (Debian and Ubuntu)
+  - name: update repo cache (Debian and Ubuntu)
     tags: always
     apt:
       update_cache: yes
