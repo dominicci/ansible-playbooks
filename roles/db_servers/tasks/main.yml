@@ -26,7 +26,7 @@
     permanent: yes
     state: enabled
     immediate: yes
-  when: ansible_distribution in ['CentOS', 'RedHat']
+  when: ansible_distribution in ['Debian', 'Ubuntu']
 
 - name: install ufw package (CentoS and RedHat)
   tags: postgres,postgresql,db
@@ -41,4 +41,4 @@
     rule: allow
     port: 5432
     proto: tcp
-  when: ansible_distribution in ['Debian', 'Ubuntu']
+  when: ansible_distribution in ['CentOS', 'RedHat']
