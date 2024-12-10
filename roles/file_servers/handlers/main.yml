@@ -1,4 +1,4 @@
-- name: start and enable samba service
+- name: start_samba
   tags: samba,fileserver
   service:
     name: "{{ samba_service }}"

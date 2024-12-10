@@ -3,4 +3,4 @@
   package:
     name: samba
     state: latest
-  notify: restart_samba
+  notify: start_samba
