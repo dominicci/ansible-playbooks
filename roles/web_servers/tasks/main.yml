@@ -1,33 +1,22 @@
-# Install Apache and PHP using package manager on Debian and Ubuntu
-- name: install Apache and PHP for Debian and Ubuntu
+# Install Apache and PHP using package manager
+- name: install Apache and PHP
   tags: apache,apache2,debian
   package:
     name: 
-      - apache2
-      - libapache2-mod-php
+      - "{{ apache_package_name }}"
+      - "{{ php_package_name }}"
     state: latest
   when: ansible_distribution in ['Debian', 'Ubuntu']
 
-# Install Apache and PHP using package manager on CentOS and RedHat
-- name: install Apache and PHP for CentOS and RedHat
-  tags: apache,httpd,centos
-  package:
-    name: 
-      - httpd
-      - php
-    state: latest
-  when: ansible_distribution in ['CentOS', 'RedHat']
-
 # Start the Apache service for CentOS and RedHat
-- name: start httpd service (CentOS and RedHat)
-  tags: apache,httpd,centos
+- name: start and enable apache service
+  tags: apache,httpd
   service:
-    name: httpd
+    name: "{{ apache_service }}"
     state: started
     enabled: yes #ensure the service starts on boot
-  when: ansible_distribution in ['CentOS', 'RedHat']
 
-# # Change e-mail address for admin in Apache configuration file for CentOS and RedHat
+# # Change e-mail address for admin in Apache configuration file
 # - name: change e-mail address for admin
 #   tags: apache,centos,httpd
 #   lineinfile:
@@ -35,14 +24,14 @@
 #     regexp: '^ServerAdmin'
 #     line: ServerAdmin samuelnjoku@gmail.com
 #   when: ansible_distribution in ['CentOS', 'RedHat']
-#   register: httpd
+#   register: apache
 
 # - name: restart httpd service (CentOS and RedHat)
 #   tags: apache,httpd,centos
 #   service:
-#     name: httpd
+#     name: "{{ apache_service }}"
 #     state: restarted
-#   when: httpd.changed
+#   when: apache.changed
 
 # Copy the index.html file to the web server root directory for CentOS and RedHat
 - name: copy default html file for site
