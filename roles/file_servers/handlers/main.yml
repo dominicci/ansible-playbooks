@@ -1,0 +1,6 @@
+- name: start and enable samba service
+  tags: samba,fileserver
+  service:
+    name: "{{ samba_service }}"
+    state: started
+    enabled: yes
