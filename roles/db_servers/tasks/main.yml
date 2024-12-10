@@ -12,6 +12,13 @@
     state: latest
   when: ansible_distribution in ['CentOS', 'RedHat']
 
+- name: install firewalld package (Debian and Ubuntu)
+  tags: postgres,postgresql,db
+  apt:
+    name: firewalld
+    state: latest
+  when: ansible_distribution in ['Debian', 'Ubuntu']
+
 - name: open PostgreSQL port 5432 on firewall (Debian and Ubuntu)
   tags: postgres,postgresql,db
   firewalld:
@@ -19,6 +26,13 @@
     permanent: yes
     state: enabled
     immediate: yes
+  when: ansible_distribution in ['CentOS', 'RedHat']
+
+- name: install ufw package (CentoS and RedHat)
+  tags: postgres,postgresql,db
+  yum:
+    name: ufw
+    state: latest
   when: ansible_distribution in ['CentOS', 'RedHat']
 
 - name: open PostgreSQL port 5432 on firewall (CentOS and RedHat)
