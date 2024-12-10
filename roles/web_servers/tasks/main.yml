@@ -16,22 +16,15 @@
     state: started
     enabled: yes #ensure the service starts on boot
 
-# # Change e-mail address for admin in Apache configuration file
-# - name: change e-mail address for admin
-#   tags: apache,centos,httpd
-#   lineinfile:
-#     path: /etc/httpd/conf/httpd.conf
-#     regexp: '^ServerAdmin'
-#     line: ServerAdmin samuelnjoku@gmail.com
-#   when: ansible_distribution in ['CentOS', 'RedHat']
-#   register: apache
-
-# - name: restart httpd service (CentOS and RedHat)
-#   tags: apache,httpd,centos
-#   service:
-#     name: "{{ apache_service }}"
-#     state: restarted
-#   when: apache.changed
+# Change e-mail address for admin in Apache configuration file
+- name: change e-mail address for admin
+  tags: apache,centos,httpd
+  lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    regexp: '^ServerAdmin'
+    line: ServerAdmin samuelnjoku@gmail.com # formerly 'ServerAdmin root@localhost'
+  when: ansible_distribution in ['CentOS', 'RedHat']
+  notify: restart_apache
 
 # Copy the index.html file to the web server root directory for CentOS and RedHat
 - name: copy default html file for site
