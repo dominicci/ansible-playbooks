@@ -24,7 +24,7 @@
     regexp: '^ServerAdmin'
     line: ServerAdmin samuelnjoku@gmail.com # formerly 'ServerAdmin root@localhost'
   when: ansible_distribution in ['CentOS', 'RedHat']
-  notify: restart_apache
+  notify: restart_apache # notifies a handler created in web_servers/handlers to restart the Apache service
 
 # Copy the index.html file to the web server root directory for CentOS and RedHat
 - name: copy default html file for site
