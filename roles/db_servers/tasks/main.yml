@@ -1,0 +1,13 @@
+- name: install PostgreSQL database package (Debian and Ubuntu)
+  tags: postgres,postgresql,db,debian
+  apt:
+    name: postgresql
+    state: latest
+  when: ansible_distribution in ['Debian', 'Ubuntu']
+
+- name: install PostgreSQL database package (CentOS and RedHat)
+  tags: postgres,postgresql,db,centos
+  yum:
+    name: postgresql
+    state: latest
+  when: ansible_distribution in ['CentOS', 'RedHat']

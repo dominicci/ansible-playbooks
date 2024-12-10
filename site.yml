@@ -4,135 +4,44 @@
   become: true
   pre_tasks:
 
-  - name: update repo cache (CentOS and RedHat)
+  - name: update repository index (CentOS and RedHat)
     tags: always
     yum:
       update_cache: yes
     changed_when: false  # control over what is considered a change
     when: ansible_distribution in ['CentOS', 'RedHat']
 
-  - name: update repo cache (Debian and Ubuntu)
+  - name: update repository index (Debian and Ubuntu)
     tags: always
     apt:
       update_cache: yes
     changed_when: false
     when: ansible_distribution in ['Debian', 'Ubuntu']
 
-
 - hosts: all
   become: true
-  tasks:
-  
-  - name: add ssh key to Albert user
-    tags: always
-    authorized_key:
-      user: albert
-      # key: "{{ lookup('file', '/home/saintdominicci/.ssh/ansible.pub') }}"
-      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM+fwpL41O7eZROCjfuvFKgJAhFVvJLjCMdTAmIG/fOT ansible"
+  roles:
+    - base
 
 - hosts: workstations
   become: true
-  tasks:
-
-  - name: install unzip
-    package:
-      name: unzip
-
-  - name: install terraform
-    unarchive:
-      src: https://releases.hashicorp.com/terraform/1.10.1/terraform_1.10.1_linux_amd64.zip
-      dest: /usr/local/bin
-      remote_src: yes
-      mode: 0755
-      owner: root
-      group: root
+  roles:
+    - workstations
 
 - hosts: web_servers
   become: true
-  tasks:
-
-  # Install Apache and PHP using package manager on Debian and Ubuntu
-  - name: install Apache and PHP for Debian and Ubuntu
-    tags: apache,apache2,debian
-    package:
-      name: 
-        - apache2
-        - libapache2-mod-php
-      state: latest
-    when: ansible_distribution in ['Debian', 'Ubuntu']
-
-  # Install Apache and PHP using package manager on CentOS and RedHat
-  - name: install Apache and PHP for CentOS and RedHat
-    tags: apache,httpd,centos
-    package:
-      name: 
-        - httpd
-        - php
-      state: latest
-    when: ansible_distribution in ['CentOS', 'RedHat']
-
-  # Start the Apache service for CentOS and RedHat
-  - name: start httpd service (CentOS and RedHat)
-    tags: apache,httpd,centos
-    service:
-      name: httpd
-      state: started
-      enabled: yes #ensure the service starts on boot
-    when: ansible_distribution in ['CentOS', 'RedHat']
-
-  # # Change e-mail address for admin in Apache configuration file for CentOS and RedHat
-  # - name: change e-mail address for admin
-  #   tags: apache,centos,httpd
-  #   lineinfile:
-  #     path: /etc/httpd/conf/httpd.conf
-  #     regexp: '^ServerAdmin'
-  #     line: ServerAdmin samuelnjoku@gmail.com
-  #   when: ansible_distribution in ['CentOS', 'RedHat']
-  #   register: httpd
-
-  # - name: restart httpd service (CentOS and RedHat)
-  #   tags: apache,httpd,centos
-  #   service:
-  #     name: httpd
-  #     state: restarted
-  #   when: httpd.changed
-
-  # Copy the index.html file to the web server root directory for CentOS and RedHat
-  - name: copy default html file for site
-    tags: apache,apache2,httpd
-    copy:
-      src: default_site.html
-      dest: /var/www/html/index.html
-      owner: root
-      group: root
-      mode: 0644 #set permissions of the file
+  roles:
+    - web_servers
 
 - hosts: db_servers
   become: true
-  tasks:
-
-  - name: install PostgreSQL database package (Debian and Ubuntu)
-    tags: postgres,postgresql,db,debian
-    apt:
-      name: postgresql
-      state: latest
-    when: ansible_distribution in ['Debian', 'Ubuntu']
-
-  - name: install PostgreSQL database package (CentOS and RedHat)
-    tags: postgres,postgresql,db,centos
-    yum:
-      name: postgresql
-      state: latest
-    when: ansible_distribution in ['CentOS', 'RedHat']
+  roles:
+    - db_servers
 
 # Install file server package
 - hosts: file_servers
   become: true
-  tasks:
+  roles:
+    - file_servers
 
-  - name: install samba package
-    tags: samba,fileserver
-    package:
-      name: samba
-      state: latest
 ...

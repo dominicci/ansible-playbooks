@@ -1,0 +1,5 @@
+- name: add ssh key to Albert user
+  tags: always
+  authorized_key:
+    user: albert
+    key: "{{ lookup('file', '/home/saintdominicci/.ssh/ansible.pub') }}"
