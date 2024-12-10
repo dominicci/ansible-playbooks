@@ -3,3 +3,10 @@
   package:
     name: samba
     state: latest
+
+- name: start and enable samba service
+  tags: samba,fileserver
+  service:
+    name: smb
+    state: started
+    enabled: yes
