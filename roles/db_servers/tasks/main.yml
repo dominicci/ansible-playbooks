@@ -11,3 +11,20 @@
     name: postgresql
     state: latest
   when: ansible_distribution in ['CentOS', 'RedHat']
+
+- name: open PostgreSQL port 5432 on firewall (Debian and Ubuntu)
+  tags: postgres,postgresql,db
+  firewalld:
+    service: postgresql
+    permanent: yes
+    state: enabled
+    immediate: yes
+  when: ansible_distribution in ['CentOS', 'RedHat']
+
+- name: open PostgreSQL port 5432 on firewall (CentOS and RedHat)
+  tags: postgres,postgresql,db
+  ufw:
+    rule: allow
+    port: 5432
+    proto: tcp
+  when: ansible_distribution in ['Debian', 'Ubuntu']
